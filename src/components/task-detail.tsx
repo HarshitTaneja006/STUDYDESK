@@ -129,7 +129,6 @@ export function TaskDetail({
       toast({
         title: "Update failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {

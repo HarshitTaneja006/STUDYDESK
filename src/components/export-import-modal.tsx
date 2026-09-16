@@ -91,7 +91,6 @@ export function ExportImportModal({
       toast({
         title: "Export failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {
@@ -104,7 +103,6 @@ export function ExportImportModal({
       toast({
         title: "Nothing to import",
         description: "Paste CSV content or upload a file first.",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
       return;
@@ -133,7 +131,6 @@ export function ExportImportModal({
       toast({
         title: "Import failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {

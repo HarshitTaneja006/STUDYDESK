@@ -185,7 +185,6 @@ export function TaskForm({ open, editingTask, onClose, onSaved }: TaskFormProps)
       toast({
         title: "Could not save task",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {

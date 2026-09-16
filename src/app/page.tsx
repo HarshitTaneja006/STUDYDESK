@@ -243,7 +243,6 @@ export default function Home() {
       toast({
         title: "Bulk action failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {
@@ -273,7 +272,6 @@ export default function Home() {
       toast({
         title: "Clear failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {

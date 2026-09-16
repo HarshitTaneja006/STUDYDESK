@@ -56,7 +56,6 @@ export function QuickAddTemplates({ onCreated }: QuickAddTemplatesProps) {
       toast({
         title: "Could not add template",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {

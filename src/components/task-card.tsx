@@ -136,7 +136,6 @@ export function TaskCard({
       toast({
         title: "Update failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {
@@ -161,7 +160,6 @@ export function TaskCard({
       toast({
         title: "Delete failed",
         description: e instanceof Error ? e.message : "Unknown error",
-        // @ts-expect-error custom variant
         variant: "destructive",
       });
     } finally {
