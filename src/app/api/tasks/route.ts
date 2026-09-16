@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { taskCreateSchema, toTaskResponse } from "@/lib/task-utils";
+import {
+  PRIORITY,
+  STATUS,
+  taskCreateSchema,
+  toTaskResponse,
+} from "@/lib/task-utils";
 
 export const dynamic = "force-dynamic";
+
+function parseDueDate(value: unknown): Date | null {
+  if (value === undefined || value === null || value === "") return null;
+  const d = new Date(value as string);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
 
 // GET /api/tasks - list tasks with optional filters
 export async function GET(req: NextRequest) {
@@ -23,13 +34,29 @@ export async function GET(req: NextRequest) {
       OR?: Array<{ title?: { contains: string }; description?: { contains: string } }>;
     } = {};
 
-    if (status && status !== "all") where.status = status;
-    if (priority && priority !== "all") where.priority = priority;
-    if (category && category !== "all" && category !== "") where.category = category;
+    if (status && status !== "all") {
+      if (!(STATUS as readonly string[]).includes(status)) {
+        return NextResponse.json({ error: "Invalid status filter" }, { status: 400 });
+      }
+      where.status = status;
+    }
+    if (priority && priority !== "all") {
+      if (!(PRIORITY as readonly string[]).includes(priority)) {
+        return NextResponse.json({ error: "Invalid priority filter" }, { status: 400 });
+      }
+      where.priority = priority;
+    }
+    if (category && category !== "all" && category !== "") {
+      if (category.length > 40) {
+        return NextResponse.json({ error: "Invalid category filter" }, { status: 400 });
+      }
+      where.category = category;
+    }
     if (search && search.trim()) {
+      const q = search.trim().slice(0, 100);
       where.OR = [
-        { title: { contains: search } },
-        { description: { contains: search } },
+        { title: { contains: q } },
+        { description: { contains: q } },
       ];
     }
 
@@ -68,10 +95,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ tasks: tasks.map(toTaskResponse) });
   } catch (e) {
     console.error("GET /api/tasks error", e);
-    return NextResponse.json(
-      { error: "Failed to fetch tasks", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch tasks" }, { status: 500 });
   }
 }
 
@@ -90,13 +114,18 @@ export async function POST(req: NextRequest) {
 
     const { title, description, priority, category, dueDate, recurrence } = parsed.data;
 
+    const due = parseDueDate(dueDate);
+    if (dueDate && due === null) {
+      return NextResponse.json({ error: "Invalid due date" }, { status: 400 });
+    }
+
     const task = await db.task.create({
       data: {
         title,
         description: description || null,
         priority,
         category: category || null,
-        dueDate: dueDate ? new Date(dueDate) : null,
+        dueDate: due,
         recurrence: recurrence || "none",
       },
       include: { subtasks: true },
@@ -105,9 +134,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ task: toTaskResponse(task) }, { status: 201 });
   } catch (e) {
     console.error("POST /api/tasks error", e);
-    return NextResponse.json(
-      { error: "Failed to create task", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create task" }, { status: 500 });
   }
 }
