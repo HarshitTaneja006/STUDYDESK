@@ -88,9 +88,6 @@ export async function GET(_req: NextRequest) {
     return NextResponse.json({ stats });
   } catch (e) {
     console.error("GET /api/stats error", e);
-    return NextResponse.json(
-      { error: "Failed to compute stats", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to compute stats" }, { status: 500 });
   }
 }

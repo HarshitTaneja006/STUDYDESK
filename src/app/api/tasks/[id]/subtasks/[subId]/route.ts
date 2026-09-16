@@ -32,10 +32,7 @@ export async function PUT(
     return NextResponse.json({ subtask: toSubtaskResponse(updated) });
   } catch (e) {
     console.error("PUT /api/tasks/:id/subtasks/:subId error", e);
-    return NextResponse.json(
-      { error: "Failed to update subtask", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update subtask" }, { status: 500 });
   }
 }
 
@@ -54,9 +51,6 @@ export async function DELETE(
     return NextResponse.json({ success: true, id: subId });
   } catch (e) {
     console.error("DELETE /api/tasks/:id/subtasks/:subId error", e);
-    return NextResponse.json(
-      { error: "Failed to delete subtask", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete subtask" }, { status: 500 });
   }
 }

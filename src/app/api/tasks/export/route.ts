@@ -22,9 +22,6 @@ export async function GET() {
     });
   } catch (e) {
     console.error("GET /api/tasks/export error", e);
-    return NextResponse.json(
-      { error: "Failed to export tasks", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to export tasks" }, { status: 500 });
   }
 }

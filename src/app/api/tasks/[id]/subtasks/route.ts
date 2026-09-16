@@ -22,10 +22,7 @@ export async function GET(
     return NextResponse.json({ subtasks: subtasks.map(toSubtaskResponse) });
   } catch (e) {
     console.error("GET /api/tasks/:id/subtasks error", e);
-    return NextResponse.json(
-      { error: "Failed to fetch subtasks", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch subtasks" }, { status: 500 });
   }
 }
 
@@ -54,9 +51,6 @@ export async function POST(
     return NextResponse.json({ subtask: toSubtaskResponse(sub) }, { status: 201 });
   } catch (e) {
     console.error("POST /api/tasks/:id/subtasks error", e);
-    return NextResponse.json(
-      { error: "Failed to create subtask", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to create subtask" }, { status: 500 });
   }
 }
