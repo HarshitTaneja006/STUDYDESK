@@ -21,10 +21,7 @@ export async function GET(
     return NextResponse.json({ task: toTaskResponse(task) });
   } catch (e) {
     console.error("GET /api/tasks/:id error", e);
-    return NextResponse.json(
-      { error: "Failed to fetch task", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to fetch task" }, { status: 500 });
   }
 }
 
@@ -58,8 +55,17 @@ export async function PUT(
     if (parsed.data.status !== undefined) data.status = parsed.data.status;
     if (parsed.data.category !== undefined)
       data.category = parsed.data.category || null;
-    if (parsed.data.dueDate !== undefined)
-      data.dueDate = parsed.data.dueDate ? new Date(parsed.data.dueDate) : null;
+    if (parsed.data.dueDate !== undefined) {
+      if (!parsed.data.dueDate) {
+        data.dueDate = null;
+      } else {
+        const d = new Date(parsed.data.dueDate);
+        if (Number.isNaN(d.getTime())) {
+          return NextResponse.json({ error: "Invalid due date" }, { status: 400 });
+        }
+        data.dueDate = d;
+      }
+    }
     if (parsed.data.recurrence !== undefined)
       data.recurrence = parsed.data.recurrence;
 
@@ -99,10 +105,7 @@ export async function PUT(
     });
   } catch (e) {
     console.error("PUT /api/tasks/:id error", e);
-    return NextResponse.json(
-      { error: "Failed to update task", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to update task" }, { status: 500 });
   }
 }
 
@@ -121,9 +124,6 @@ export async function DELETE(
     return NextResponse.json({ success: true, id });
   } catch (e) {
     console.error("DELETE /api/tasks/:id error", e);
-    return NextResponse.json(
-      { error: "Failed to delete task", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to delete task" }, { status: 500 });
   }
 }
