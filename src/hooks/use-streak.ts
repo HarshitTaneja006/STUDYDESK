@@ -4,7 +4,6 @@ import { useSyncExternalStore, useCallback } from "react";
 
 const STORAGE_KEY = "studydesk:streak";
 const POINTS_KEY = "studydesk:points";
-const LAST_COMPLETION_KEY = "studydesk:last-completion";
 
 interface StreakData {
   currentStreak: number;

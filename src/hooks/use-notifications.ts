@@ -77,13 +77,6 @@ export function useNotifications(tasks: TaskResponse[]) {
     if (typeof window === "undefined" || !("Notification" in window)) return;
 
     const now = Date.now();
-    let lastCheck = now;
-    try {
-      const raw = window.localStorage.getItem(LAST_CHECK_KEY);
-      if (raw) lastCheck = Number(raw) || now;
-    } catch {
-      // ignore
-    }
 
     const dueSoon = filterDueSoon(tasks, 24);
     const overdue = filterOverdue(tasks);

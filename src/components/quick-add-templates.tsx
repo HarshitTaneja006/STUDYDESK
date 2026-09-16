@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Zap, X, ChevronDown } from "lucide-react";
+import { Zap, ChevronDown } from "lucide-react";
 import { TASK_TEMPLATES, type TaskTemplate } from "@/lib/task-templates";
 import { useToast } from "@/hooks/use-toast";
 import type { TaskResponse } from "@/lib/task-utils";

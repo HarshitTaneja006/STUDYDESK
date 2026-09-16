@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Plus,
   ListTodo,
@@ -69,8 +69,7 @@ export default function Home() {
   const { tasks, loading, error, refetch } = useTasks(hydrated ? filters : filters);
   const { stats, refetch: refetchStats } = useStats();
   const { toast } = useToast();
-  const { recordCompletion, undoCompletion } = useStreak();
-  const searchInputRef = useRef<HTMLInputElement | null>(null);
+  const { recordCompletion } = useStreak();
 
   const categories = useMemo(() => {
     const set = new Set<string>();

@@ -13,7 +13,6 @@ export function AchievementsWidget() {
 
   const stats = { totalCompleted, longestStreak, currentStreak, studyPoints };
   const unlocked = ACHIEVEMENTS.filter((a) => a.isUnlocked(stats));
-  const locked = ACHIEVEMENTS.filter((a) => !a.isUnlocked(stats));
   const unlockedCount = unlocked.length;
   const totalCount = ACHIEVEMENTS.length;
   const progressPct = Math.round((unlockedCount / totalCount) * 100);
