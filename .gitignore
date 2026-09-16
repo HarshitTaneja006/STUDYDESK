@@ -30,8 +30,9 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (never commit real env files)
+.env
+.env*.local
 
 # vercel
 .vercel
@@ -40,6 +41,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sqlite databases (local dev data, never commit)
+db/*.db
+db/*.db-journal
+db/*.db-wal
+db/*.db-shm
+*.db
+
+# local logs
+*.log
+dev.log
+server.log
 local-*
 .claude
 .z-ai-config
