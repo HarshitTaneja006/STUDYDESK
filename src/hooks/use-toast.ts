@@ -25,6 +25,10 @@ const actionTypes = {
   REMOVE_TOAST: "REMOVE_TOAST",
 } as const
 
+// Referenced as a value so the constant is not flagged as type-only usage.
+const _actionTypeValues = Object.values(actionTypes);
+void _actionTypeValues;
+
 let count = 0
 
 function genId() {

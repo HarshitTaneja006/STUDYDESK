@@ -103,7 +103,7 @@ export function useTasks(filters: TaskFilters) {
     } finally {
       setLoading(false);
     }
-  }, [filters.status, filters.priority, filters.category, filters.search, filters.sort, filters.sortDir]);
+  }, [filters]);
 
   useEffect(() => {
     refetch();
