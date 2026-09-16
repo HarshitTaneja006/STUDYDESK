@@ -26,7 +26,17 @@ export const taskCreateSchema = z.object({
     .or(z.literal("")),
   priority: z.enum(PRIORITY).default("medium"),
   category: z.string().trim().max(40, "Category is too long").optional().or(z.literal("")),
-  dueDate: z.string().optional().nullable(),
+  dueDate: z
+    .string()
+    .optional()
+    .nullable()
+    .refine(
+      (v) => {
+        if (v === undefined || v === null || v === "") return true;
+        return !Number.isNaN(new Date(v).getTime());
+      },
+      { message: "Invalid due date" }
+    ),
   recurrence: z.enum(RECURRENCE).optional(),
 });
 
