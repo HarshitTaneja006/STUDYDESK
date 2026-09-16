@@ -5,8 +5,14 @@ import { z } from "zod";
 
 export const dynamic = "force-dynamic";
 
+const MAX_CSV_BYTES = 500_000;
+const MAX_CSV_ROWS = 2000;
+
 const importSchema = z.object({
-  csv: z.string().min(1, "CSV content required"),
+  csv: z
+    .string()
+    .min(1, "CSV content required")
+    .max(MAX_CSV_BYTES, "CSV too large (max 500KB)"),
   mode: z.enum(["merge", "replace"]).default("merge"),
 });
 
@@ -27,6 +33,12 @@ export async function POST(req: NextRequest) {
     if (rows.length === 0) {
       return NextResponse.json(
         { error: "No rows found in CSV (must include header + at least 1 row)" },
+        { status: 400 }
+      );
+    }
+    if (rows.length > MAX_CSV_ROWS) {
+      return NextResponse.json(
+        { error: `Too many rows (max ${MAX_CSV_ROWS})` },
         { status: 400 }
       );
     }
@@ -91,9 +103,6 @@ export async function POST(req: NextRequest) {
     });
   } catch (e) {
     console.error("POST /api/tasks/import error", e);
-    return NextResponse.json(
-      { error: "Failed to import tasks", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to import tasks" }, { status: 500 });
   }
 }
