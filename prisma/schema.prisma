@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Task {
+  id          String      @id @default(cuid())
+  title       String
+  description String?
+  priority    String      @default("medium") // low | medium | high
+  status      String      @default("pending") // pending | completed
+  category    String?     // e.g. Homework, Exam, Personal, Project
+  dueDate     DateTime?
+  recurrence  String      @default("none") // none | daily | weekly | monthly
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  subtasks    Subtask[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([dueDate])
+  @@index([category])
+  @@index([recurrence])
+}
+
+model Subtask {
+  id        String   @id @default(cuid())
+  title     String
+  done      Boolean  @default(false)
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([taskId])
+}
