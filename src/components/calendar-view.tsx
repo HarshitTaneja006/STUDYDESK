@@ -260,10 +260,9 @@ export function CalendarView({ tasks, onSelectTask, onSelectDay }: CalendarViewP
                   style={{
                     fontFamily: "'Patrick Hand SC', cursive",
                     fontSize: "0.85rem",
-                    color: isToday ? "#0b74d5" : inMonth ? "#41403e" : "#868e96",
+                    color: isToday ? "#fff" : inMonth ? "#41403e" : "#868e96",
                     fontWeight: isToday ? 700 : 400,
                     background: isToday ? "#0b74d5" : "transparent",
-                    color: isToday ? "#fff" : undefined,
                     width: isToday ? "22px" : "auto",
                     height: isToday ? "22px" : "auto",
                     borderRadius: isToday ? "50%" : 0,
