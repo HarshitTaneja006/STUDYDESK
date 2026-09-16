@@ -121,7 +121,7 @@ export function useNotifications(tasks: TaskResponse[]) {
       try {
         new Notification(n.title, {
           body: n.body,
-          icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+          icon: "/logo.svg",
           tag: n.id,
         });
       } catch {

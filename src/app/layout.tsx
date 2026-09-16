@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   keywords: ["student tasks", "homework planner", "task manager", "study planner", "PaperCSS"],
   authors: [{ name: "StudyDesk" }],
   icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+    icon: "/logo.svg",
   },
 };
 
