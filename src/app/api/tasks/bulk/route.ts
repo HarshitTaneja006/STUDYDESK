@@ -36,9 +36,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ action, updated: r.count, ids });
   } catch (e) {
     console.error("POST /api/tasks/bulk error", e);
-    return NextResponse.json(
-      { error: "Bulk action failed", detail: String(e) },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Bulk action failed" }, { status: 500 });
   }
 }
