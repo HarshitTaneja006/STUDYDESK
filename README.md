@@ -238,10 +238,14 @@ bun run db:generate
 
 ### Environment Variables
 
-Create a `.env` file in the project root:
+Copy `.env.example` to `.env` (already git-ignored, never commit it):
+
+```bash
+cp .env.example .env
+```
 
 ```env
-DATABASE_URL=file:/home/z/my-project/db/custom.db
+DATABASE_URL=file:./db/custom.db
 ```
 
 ### Running the Dev Server
@@ -411,12 +415,11 @@ studydesk/
 │       ├── task-templates.ts     # 8 quick-add template definitions
 │       ├── task-utils.ts         # Zod schemas, types, CSV utils, recurrence
 │       └── utils.ts              # cn() class merge utility
-├── .env                          # DATABASE_URL
+├── .env.example                  # Copy to .env (git-ignored)
 ├── .gitignore
-├── Caddyfile                     # Gateway reverse proxy config
 ├── components.json               # shadcn/ui config
 ├── eslint.config.mjs
-├── next.config.ts                # Standalone output, allowed dev origins
+├── next.config.ts                # Standalone output + security headers
 ├── package.json
 ├── postcss.config.mjs
 ├── tailwind.config.ts
@@ -469,7 +472,7 @@ model Subtask {
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `DATABASE_URL` | SQLite database file path | `file:/home/z/my-project/db/custom.db` |
+| `DATABASE_URL` | SQLite database file path | `file:./db/custom.db` |
 
 ### localStorage Keys
 
@@ -490,12 +493,15 @@ The app uses localStorage for client-side state (no server-side sessions):
 
 ```typescript
 const nextConfig: NextConfig = {
-  output: "standalone",           // Optimized production build
-  typescript: { ignoreBuildErrors: true },
-  reactStrictMode: false,
-  allowedDevOrigins: ["*.space-z.ai", "*.chatglm.cn"],
+  output: "standalone", // Optimized production build
+  reactStrictMode: true, // Strict checks on
+  // + security headers (nosniff, DENY framing, restricted permissions)
 };
 ```
+
+> **Security note:** this app has no authentication — every API route is
+> open. Only run it locally or behind your own auth/proxy. Do not expose
+> it directly to the internet.
 
 ---
 
