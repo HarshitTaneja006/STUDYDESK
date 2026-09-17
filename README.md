@@ -1,333 +1,149 @@
 # StudyDesk — Student Task Manager
 
-A feature-rich, gamified task management application designed specifically for students. Built with Next.js 16, TypeScript, Prisma, and styled with [PaperCSS](https://www.getpapercss.com/) for a hand-drawn, paper-notebook aesthetic.
+A gamified, paper-styled task manager for students. Plan homework, exams, projects
+and personal goals with priorities, due dates, subtasks, recurring tasks, a calendar
+view, a Pomodoro focus timer, streaks and achievement badges — wrapped in a
+hand-drawn PaperCSS aesthetic with light and dark ("midnight desk") themes.
+
+Built with **Next.js 16** (App Router), **TypeScript**, **Prisma + SQLite**,
+**Tailwind CSS 4 + PaperCSS**, **Zod** validation and **Bun**.
 
 ---
 
-## Overview
+## Table of Contents
 
-StudyDesk helps students manage homework, exams, projects, and personal tasks with priorities, due dates, subtasks, recurring tasks, a calendar view, a Pomodoro focus timer, achievement badges, streak tracking, and more — all wrapped in a delightful paper-themed UI with light/dark modes.
-
-### Key Highlights
-
-- Full CRUD task management with subtasks/checklists
-- Monthly calendar view with color-coded due dates
-- Recurring tasks (daily/weekly/monthly) with auto-advance on completion
-- Gamification: streaks, study points, 12 achievement badges
-- Pomodoro focus timer with customizable durations
-- Browser notifications for due-soon and overdue tasks
-- Quick-add templates for common student tasks
-- CSV export/import for data portability
-- Drag-and-drop manual task reordering
-- Loading skeletons, confetti, and celebration animations
-- Dark "midnight desk" theme toggle
-- Fully responsive, keyboard-accessible, with 7+ keyboard shortcuts
+- [Features](#features)
+  - [Task management](#task-management)
+  - [Subtasks](#subtasks--checklists)
+  - [Recurring tasks](#recurring-tasks)
+  - [Calendar view](#calendar-view)
+  - [Bulk actions](#bulk-actions)
+  - [Gamification](#gamification)
+  - [Pomodoro timer](#pomodoro-focus-timer)
+  - [Notifications](#notifications)
+  - [Templates, export/import, dashboard](#quick-add-templates)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Scripts](#scripts)
+- [API Reference](#api-reference)
+- [Database Schema](#database-schema)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Security Notes](#security-notes)
+- [Styling](#styling)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
 
 ---
 
 ## Features
 
-### Core Task Management
+### Task management
 
-| Feature | Description |
-|---------|-------------|
-| Create / Edit / Delete | Full CRUD with inline form validation (Zod) and character counters |
-| Mark Complete | One-click toggle with confetti animation and toast feedback |
-| Pending vs Completed | Auto-grouped sections with live count badges |
-| Priority Levels | Low / Medium / High with color-coded left stripes and chips |
-| Due Dates | DateTime picker with overdue/today/tomorrow detection and pulse indicators |
-| Categories | Homework, Exam, Project, Personal, Reading, Other (custom categories supported) |
-| Search | Live search across titles and descriptions |
-| Filter | By status, priority, and category with a "Clear" reset button |
-| Sort | By due date, priority, recently added, or manual (drag-and-drop) — ascending/descending |
+| Feature | Details |
+|---------|---------|
+| Create / edit / delete | Full CRUD with inline Zod validation (title 2–120 chars, description up to 600) and character counters |
+| Mark complete | One-click toggle with confetti burst and toast feedback |
+| Pending vs Completed | Auto-grouped sections with live count badges and an "All done!" celebration empty state |
+| Priorities | Low / Medium / High with color-coded left stripes and chips |
+| Due dates | Date-time picker with overdue / today / tomorrow detection, due-soon pulse dot and overdue glow |
+| Categories | Homework, Exam, Project, Personal, Reading, Other — custom categories supported (max 40 chars) |
+| Search | Live search across titles and descriptions (capped at 100 chars server-side) |
+| Filters | By status, priority and category, with one-click reset; filter state persists in localStorage |
+| Sorting | By due date (dateless tasks sort last), priority, or creation time — ascending/descending |
+| Manual ordering | Drag-and-drop reordering via dnd-kit, persisted per filter view |
+| Detail drawer | Slide-in panel with meta chips, due-date card, full description, subtasks, timestamps, edit/complete actions |
 
-### Subtasks / Checklists
+### Subtasks / checklists
 
-- Add unlimited subtasks to any task
-- Toggle individual subtask completion
-- Progress bar showing done/total on both task cards and detail drawer
-- Subtasks auto-reset when a recurring task auto-advances
+- Unlimited subtasks per task (title 1–160 chars)
+- Toggle, rename and delete individual subtasks
+- Progress bar (`done/total`) on cards and in the detail drawer
+- Subtasks reset automatically when a recurring task rolls over
 
-### Recurring Tasks
+### Recurring tasks
 
-- Set recurrence to none, daily, weekly, or monthly
-- Completing a recurring task **auto-advances** the due date to the next cycle
-- Subtasks are reset for the new cycle
-- Visual recurrence badge (blue pill with Repeat icon) on cards and detail drawer
+- Recurrence: `none` | `daily` | `weekly` | `monthly` (requires a due date)
+- Completing a recurring task **auto-advances** it to the next cycle instead of
+  closing it, and resets its subtasks
+- Blue recurrence badge on cards and in the detail drawer
 
-### Calendar View
+### Calendar view
 
-- Full month grid with weekday headers
-- Navigation: previous/next month + "Today" jump button
-- Color-coded dots per day (red=high, yellow=medium, green=low, hollow=completed)
-- Completion count per day (e.g., "2/3")
-- Today highlighted with blue circle
-- Click any task dot to open the detail drawer
-- Hover reveals "+" button to add a task on that day
+- Full month grid with prev/next navigation and a "Today" jump button
+- Per-day dots colored by priority (red / yellow / green; hollow = completed)
+- Per-day completion counts (e.g. `2/3`), today highlighted
+- Click a dot to open the task; hover a day for a quick-add (`+`) button
 
-### Task Detail Drawer
+### Bulk actions
 
-- Slide-in drawer from the right (460px wide)
-- Shows: full title, priority/category/status meta chips, due date card with overdue/today detection, full description, subtask checklist with progress bar, created/updated timestamps
-- Edit and Complete/Reopen action buttons
-- Escape to close, click backdrop to close
-
-### Bulk Actions
-
-- "Select" toggle button in header activates bulk mode
-- Per-card selection checkboxes
-- "Select all visible" and "Clear selection" controls
-- Sticky BulkActionBar with Complete / Restore / Delete / Clear actions
-- Bulk API endpoint for efficient batch operations
+- `B` toggles selection mode; per-card checkboxes, select-all-visible, clear
+- Sticky action bar: complete / restore / delete (max 200 tasks per batch)
+- Separate one-click "clear completed" action
 
 ### Gamification
 
-#### Streak Tracking
-- Current streak (consecutive days with task completion)
-- Best/longest streak ever
-- Total completed tasks (all-time)
-- Study points: high=30pts, medium=20pts, low=10pts per task
-- Flame flicker animation on active streak
-- Persisted to localStorage
+**Streaks & points** (persisted in localStorage):
 
-#### Achievements / Badges (12 milestones)
-| Badge | Emoji | Unlock Condition |
-|-------|-------|-------------------|
-| First Step | 🎯 | Complete 1 task |
-| Getting Started | 🌱 | Complete 5 tasks |
-| On Fire | 🔥 | Complete 10 tasks |
-| Task Master | ⭐ | Complete 25 tasks |
-| Centurion | 🏆 | Complete 100 tasks |
-| Spark | ✨ | Start a 1-day streak |
-| Consistent | 📅 | 3-day streak |
-| Week Warrior | ⚔️ | 7-day streak |
-| Unstoppable | 💎 | 30-day streak |
-| Century Club | 💯 | Earn 100 study points |
-| Scholar | 🎓 | Earn 500 study points |
-| Legend | 👑 | Earn 1000 study points |
+- Current streak (consecutive completion days), longest streak, total completed
+- Study points per completion: high = 30, medium = 20, low = 10
+- Flame flicker animation while a streak is alive
 
-- Collapsible widget with progress bar (X/12)
-- Unlocked badges: full color, locked: grayscale with lock icon
-- Toast notification + full-screen burst animation on unlock
+**Achievements** — 12 badges with progress tracking, grayscale locked state,
+toast + full-screen burst on unlock:
 
-### Pomodoro Focus Timer
+| Badge | Unlock condition |
+|-------|------------------|
+| First Step 🎯 | Complete 1 task |
+| Getting Started 🌱 | Complete 5 tasks |
+| On Fire 🔥 | Complete 10 tasks |
+| Task Master ⭐ | Complete 25 tasks |
+| Centurion 🏆 | Complete 100 tasks |
+| Consistent 📅 | 3-day streak |
+| Week Warrior ⚔️ | 7-day streak |
+| Unstoppable 💎 | 30-day streak |
+| Century Club 💯 | Earn 100 study points |
+| Scholar 🎓 | Earn 500 study points |
+| Legend 👑 | Earn 1000 study points |
+| Spark ✨ | Start a 1-day streak |
 
-- Focus mode (default 25 min) + Break mode (default 5 min)
-- Customizable durations: 5 focus presets (15/25/35/45/50m) + 5 break presets (3/5/10/15/20m)
-- Circular SVG progress ring with animated stroke
-- Start / Pause / Resume / Reset controls
-- Session counter (🍅 ×N)
-- Web Audio API beep on completion (660Hz focus, 440Hz break)
-- Encouraging messages based on session count
-- Durations persist to localStorage
+### Pomodoro focus timer
+
+- Focus (default 25 min) and break (default 5 min) modes with an SVG progress ring
+- Preset durations (focus 15/25/35/45/50, break 3/5/10/15/20), persisted locally
+- Start / pause / resume / reset, session counter, completion chime, encouragement messages
 
 ### Notifications
 
-- Browser notifications for tasks due within 24 hours
-- Overdue task alerts
-- Deduplication via localStorage-tracked notified IDs
-- Permission management (request/grant/deny)
-- Toggle in Tools menu with due-soon/overdue summary
+- Opt-in browser notifications for tasks due within 24 h and overdue tasks
+- Deduplicated via a bounded notified-ID list; permission states handled gracefully
+- Summary counts in the Tools menu
 
-### Quick Add Templates (8 presets)
+### Quick-add templates
 
-| Template | Emoji | Priority | Category | Default Due |
-|----------|-------|----------|----------|-------------|
-| Problem Set | ✏️ | High | Homework | +48h |
-| Reading | 📖 | Low | Reading | +72h |
-| Exam Prep | 📝 | High | Exam | +168h |
-| Essay Draft | 📄 | Medium | Homework | +96h |
-| Project | 🔧 | Medium | Project | +120h |
-| Lab Report | 🧪 | High | Homework | +72h |
-| Presentation | 🎯 | Medium | Project | +96h |
-| Quiz Review | ⚡ | Medium | Exam | +24h |
+8 one-click student presets (Problem Set, Reading, Exam Prep, Essay Draft,
+Project, Lab Report, Presentation, Quiz Review) with sensible priority,
+category, description and due offset. Smart due times: 5 PM same-day, 9 AM later.
 
-### Export / Import
+### Export / import
 
-- Export all tasks to CSV with proper escaping (title, description, priority, status, category, dueDate, recurrence, timestamps)
-- Import CSV with merge or replace modes
-- Drag-and-drop file upload or paste CSV text
-- Import result display with per-row error reporting
+- Export every task to CSV (proper quoting/escaping) with a dated filename
+- Import from pasted text or file drop, in `merge` or `replace` modes
+- Limits: 500 KB / 2000 rows per import; per-row error report (first 20 shown)
 
-### Dashboard & Analytics
+### Dashboard & analytics
 
-- 6 stat cards: Total, Pending, Done, Overdue, Due Today, High Priority
-- Animated number counters (requestAnimationFrame easing)
-- Circular SVG progress ring showing overall completion %
-- Priority breakdown bar (stacked horizontal: red/yellow/green with legend)
-- "Clear completed" button
-- Loading skeleton screens with shimmer animation
+- Stat cards: Total, Pending, Done, Overdue, Due Today, High Priority (animated counters)
+- Overall completion ring + stacked priority breakdown bar
+- 7-day weekly recap modal (completions, points, avg/day, streak, best day, badges)
+- Shimmer skeleton screens while loading
 
-### Weekly Recap Modal
+### Dark theme
 
-- 4 summary stats: week's completions, points, avg/day, current streak
-- 7-day bar chart with heatmap-colored bars (green gradient based on completion count)
-- Today's bar highlighted with blue star marker
-- "Best day" callout
-- Earned badges display
-
-### Dark Theme
-
-- "Midnight desk" warm palette (#2a2520 bg, not pure black)
-- Smart-invert CSS approach preserves semantic accent colors
-- Animated Sun/Moon toggle button
-- FOUC prevention via inline init script
-- Respects system `prefers-color-scheme`
-- Persisted to localStorage
-
-### UX Polish
-
-- Confetti animation on task completion (30 paper-style pieces from checkbox position)
-- Full-screen achievement burst celebration (24 radiating pieces + badge card)
-- "All done!" celebration empty state with PartyPopper icon
-- Overdue task glow animation (red box-shadow pulse)
-- Card hover lift effect (translateY + rotate + shadow)
-- Delete confirmation overlay (prevents accidental data loss)
-- Drag-and-drop task reordering with dnd-kit (manual sort mode)
-- Sticky footer with completion summary and keyboard shortcut hints
-- Loading skeleton screens with staggered shimmer
-- Motivational quote widget (15 quotes, daily rotation)
-
----
-
-## Tech Stack
-
-| Category | Technology |
-|----------|-----------|
-| **Framework** | Next.js 16 (App Router, Turbopack) |
-| **Language** | TypeScript 5 |
-| **Styling** | Tailwind CSS 4 + [PaperCSS](https://www.getpapercss.com/) 1.9.2 |
-| **Database** | Prisma ORM 6 + SQLite |
-| **Validation** | Zod 4 |
-| **Icons** | Lucide React |
-| **Drag & Drop** | @dnd-kit/core + @dnd-kit/sortable |
-| **Package Manager** | Bun |
-| **Linting** | ESLint 9 + eslint-config-next |
-
----
-
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) 18+ (or [Bun](https://bun.sh/) runtime)
-- Bun package manager (`curl -fsSL https://bun.sh/install | bash`)
-
-### Installation
-
-```bash
-# Clone the repository
-git clone <your-repo-url>
-cd studydesk
-
-# Install dependencies
-bun install
-```
-
-### Database Setup
-
-The app uses SQLite via Prisma. The database file lives at `db/custom.db`.
-
-```bash
-# Push the schema to create/update tables
-bun run db:push
-
-# (Optional) Regenerate the Prisma client
-bun run db:generate
-```
-
-### Environment Variables
-
-Copy `.env.example` to `.env` (already git-ignored, never commit it):
-
-```bash
-cp .env.example .env
-```
-
-```env
-DATABASE_URL=file:./db/custom.db
-```
-
-### Running the Dev Server
-
-```bash
-bun run dev
-```
-
-The app will be available at `http://localhost:3000`.
-
-### Linting
-
-```bash
-bun run lint
-```
-
-### Production Build
-
-```bash
-bun run build
-bun run start
-```
-
----
-
-## API Reference
-
-All API routes are under `/api` and return JSON.
-
-### Tasks
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/tasks` | List tasks with filters: `status`, `priority`, `category`, `search`, `sort` (due/priority/created/manual), `dir` (asc/desc) |
-| `POST` | `/api/tasks` | Create a task (Zod-validated body: title, description, priority, category, dueDate, recurrence) |
-| `GET` | `/api/tasks/:id` | Get a single task with subtasks |
-| `PUT` | `/api/tasks/:id` | Update a task (partial fields). Recurring tasks auto-advance due date on completion |
-| `DELETE` | `/api/tasks/:id` | Delete a task (cascades to subtasks) |
-| `POST` | `/api/tasks/bulk` | Bulk action: `{ ids: string[], action: "complete" \| "pending" \| "delete" }` |
-| `DELETE` | `/api/tasks/clear-completed` | Delete all completed tasks |
-| `GET` | `/api/tasks/export` | Download all tasks as CSV |
-| `POST` | `/api/tasks/import` | Import tasks from CSV: `{ csv: string, mode: "merge" \| "replace" }` |
-
-### Subtasks
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/tasks/:id/subtasks` | List subtasks for a task |
-| `POST` | `/api/tasks/:id/subtasks` | Create a subtask |
-| `PUT` | `/api/tasks/:id/subtasks/:subId` | Update a subtask (title, done) |
-| `DELETE` | `/api/tasks/:id/subtasks/:subId` | Delete a subtask |
-
-### Stats
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/api/stats` | Dashboard statistics: total, pending, completed, overdue, dueToday, dueThisWeek, highPriority, byPriority, byCategory, completionRate |
-
-### Example API Calls
-
-```bash
-# Create a task
-curl -X POST http://localhost:3000/api/tasks \
-  -H "Content-Type: application/json" \
-  -d '{"title":"Read Chapter 8","priority":"low","category":"Reading","dueDate":"2026-09-20T09:00:00.000Z","recurrence":"weekly"}'
-
-# List pending tasks sorted by due date
-curl http://localhost:3000/api/tasks?status=pending&sort=due&dir=asc
-
-# Mark task complete (recurring tasks auto-advance)
-curl -X PUT http://localhost:3000/api/tasks/TASK_ID \
-  -H "Content-Type: application/json" \
-  -d '{"status":"completed"}'
-
-# Bulk complete
-curl -X POST http://localhost:3000/api/tasks/bulk \
-  -H "Content-Type: application/json" \
-  -d '{"ids":["id1","id2","id3"],"action":"complete"}'
-
-# Export to CSV
-curl -o tasks.csv http://localhost:3000/api/tasks/export
-```
+- Warm "midnight desk" palette via smart-invert CSS (semantic colors preserved)
+- Animated Sun/Moon toggle, FOUC-prevention init script, follows system preference
+- Persisted in localStorage
 
 ---
 
@@ -335,95 +151,156 @@ curl -o tasks.csv http://localhost:3000/api/tasks/export
 
 | Key | Action |
 |-----|--------|
-| `N` | Create new task |
-| `/` | Focus the search bar |
-| `V` | Switch to list view |
-| `C` | Switch to calendar view |
-| `B` | Toggle bulk select mode |
-| `A` | Select all visible tasks (in bulk mode) |
-| `?` | Open help & shortcuts modal |
-| `Esc` | Close modal / drawer / clear focus |
+| `N` | New task |
+| `/` | Focus search |
+| `V` / `C` | List / calendar view |
+| `B` | Bulk select mode |
+| `A` | Select all visible (in bulk mode) |
+| `?` | Help & shortcuts modal |
+| `Esc` | Close modal / drawer / blur input |
 
 ---
 
-## Project Structure
+## Tech Stack
 
+| Category | Technology |
+|----------|-----------|
+| Framework | Next.js 16 (App Router, standalone output) |
+| Language | TypeScript 5 (strict; build fails on type errors) |
+| Styling | Tailwind CSS 4 + PaperCSS 1.9.2 (static vendored CSS) |
+| Database | Prisma ORM 6 + SQLite |
+| Validation | Zod 4 (client hints + server-side enforcement) |
+| Icons | Lucide React |
+| Drag & drop | @dnd-kit/core + @dnd-kit/sortable |
+| Toasts | @radix-ui/react-toast (shadcn/ui primitives) |
+| Runtime / PM | Bun |
+| Linting | ESLint 9 + eslint-config-next |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- **Bun** 1.x (`curl -fsSL https://bun.sh/install | bash`) — or Node.js 18+ with npm
+  (adjust commands accordingly)
+- No external services needed — the database is a local SQLite file
+
+### 1. Clone & install
+
+```bash
+git clone <your-repo-url>
+cd studydesk
+bun install
 ```
-studydesk/
-├── prisma/
-│   └── schema.prisma              # Task + Subtask models with indexes
-├── public/
-│   ├── papercss/
-│   │   └── paper.min.css          # PaperCSS framework (static)
-│   ├── logo.svg
-│   └── robots.txt
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx             # Root layout (PaperCSS + theme init script)
-│   │   ├── page.tsx               # Main page (all UI orchestration)
-│   │   ├── globals.css            # Global styles, animations, dark theme
-│   │   └── api/
-│   │       ├── route.ts           # Health check
-│   │       ├── stats/route.ts     # Dashboard statistics
-│   │       └── tasks/
-│   │           ├── route.ts       # GET (list+filters) / POST (create)
-│   │           ├── [id]/
-│   │           │   ├── route.ts   # GET / PUT / DELETE single task
-│   │           │   └── subtasks/
-│   │           │       ├── route.ts       # GET / POST subtasks
-│   │           │       └── [subId]/route.ts  # PUT / DELETE subtask
-│   │           ├── bulk/route.ts          # Bulk update/delete
-│   │           ├── clear-completed/route.ts  # Delete all completed
-│   │           ├── export/route.ts       # CSV export
-│   │           └── import/route.ts       # CSV import
-│   ├── components/
-│   │   ├── achievement-burst.tsx  # Full-screen achievement celebration
-│   │   ├── achievements-widget.tsx# Collapsible badge grid
-│   │   ├── bulk-action-bar.tsx    # Sticky bulk action toolbar
-│   │   ├── calendar-view.tsx     # Monthly calendar grid
-│   │   ├── confetti.tsx          # Confetti burst on task completion
-│   │   ├── export-import-modal.tsx # CSV export/import modal
-│   │   ├── filter-bar.tsx        # Search + filters + sort
-│   │   ├── help-modal.tsx        # Keyboard shortcuts + tips modal
-│   │   ├── motivation-quote.tsx  # Daily rotating quote widget
-│   │   ├── notification-settings.tsx # Browser notification toggle
-│   │   ├── pomodoro-timer.tsx    # Focus/break timer with SVG ring
-│   │   ├── quick-add-templates.tsx # 8 student task presets
-│   │   ├── skeleton.tsx          # Loading skeleton components
-│   │   ├── sortable-task-list.tsx# DnD wrapper (dnd-kit)
-│   │   ├── stats-dashboard.tsx   # 6 stat cards + circular ring + priority bar
-│   │   ├── streak-widget.tsx     # Streak/points/best/total widget
-│   │   ├── subtask-list.tsx      # Subtask CRUD with progress bar
-│   │   ├── task-card.tsx         # Task card with priority stripe, subtask progress
-│   │   ├── task-detail.tsx       # Slide-in detail drawer
-│   │   ├── task-form.tsx         # Create/edit modal with recurrence picker
-│   │   ├── theme-toggle.tsx      # Animated Sun/Moon dark mode toggle
-│   │   ├── weekly-recap-modal.tsx# 7-day bar chart + badges
-│   │   └── ui/
-│   │       ├── toast.tsx         # Toast primitives (shadcn)
-│   │       └── toaster.tsx       # Toast viewport (shadcn)
-│   ├── hooks/
-│   │   ├── use-mobile.ts         # Responsive breakpoint hook
-│   │   ├── use-notifications.ts   # Browser notification management
-│   │   ├── use-streak.ts         # Streak/points/achievements tracking
-│   │   ├── use-tasks.ts          # Task fetching + filter state + localStorage
-│   │   ├── use-theme.ts          # Dark/light theme management
-│   │   └── use-toast.ts          # Toast notification hook (shadcn)
-│   └── lib/
-│       ├── achievements.ts       # 12 achievement definitions
-│       ├── db.ts                 # Prisma client singleton
-│       ├── task-templates.ts     # 8 quick-add template definitions
-│       ├── task-utils.ts         # Zod schemas, types, CSV utils, recurrence
-│       └── utils.ts              # cn() class merge utility
-├── .env.example                  # Copy to .env (git-ignored)
-├── .gitignore
-├── components.json               # shadcn/ui config
-├── eslint.config.mjs
-├── next.config.ts                # Standalone output + security headers
-├── package.json
-├── postcss.config.mjs
-├── tailwind.config.ts
-└── tsconfig.json
+
+### 2. Configure environment
+
+```bash
+cp .env.example .env
+```
+
+`.env` is git-ignored — never commit it. Contents:
+
+```env
+DATABASE_URL=file:./db/custom.db
+```
+
+### 3. Create the database
+
+```bash
+bun run db:push      # create tables from prisma/schema.prisma
+bun run db:generate  # (re)generate the Prisma client — also runs on build
+```
+
+### 4. Run it
+
+```bash
+bun run dev          # http://localhost:3000
+```
+
+### 5. Production
+
+```bash
+bun run build
+bun run start        # http://localhost:3000
+```
+
+---
+
+## Scripts
+
+| Command | What it does |
+|---------|--------------|
+| `bun run dev` | Dev server on port 3000 |
+| `bun run build` | `prisma generate && next build` (standalone output) |
+| `bun run start` | Production server on port 3000 |
+| `bun run lint` | ESLint over the repo (must be warning-free) |
+| `bun run db:push` | Push schema to SQLite (prototyping) |
+| `bun run db:generate` | Regenerate Prisma client |
+| `bun run db:migrate` | `prisma migrate dev` (versioned migrations) |
+| `bun run db:reset` | ⚠️ Destructive database reset |
+
+---
+
+## API Reference
+
+Base path `/api`, all JSON. Error responses are generic
+(`{ "error": "..." }`); details are logged server-side only.
+
+### Tasks
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/tasks` | List with `status` (pending/completed/all), `priority`, `category`, `search` (≤100 chars), `sort` (due/priority/created), `dir` (asc/desc). Invalid filters → 400 |
+| `POST` | `/api/tasks` | Create. Body: `title*` (2–120), `description` (≤600), `priority`, `category` (≤40), `dueDate` (valid date string), `recurrence`. Invalid → 400 |
+| `GET` | `/api/tasks/:id` | Single task with subtasks (404 if missing) |
+| `PUT` | `/api/tasks/:id` | Partial update. Completing a recurring task advances its due date and resets subtasks; response includes `recurrenceAdvanced` |
+| `DELETE` | `/api/tasks/:id` | Delete (subtasks cascade) |
+| `POST` | `/api/tasks/bulk` | `{ ids: string[1..200], action: "complete" \| "pending" \| "delete" }` |
+| `DELETE` | `/api/tasks/clear-completed` | Delete all completed tasks (`{ deleted }`) |
+| `GET` | `/api/tasks/export` | CSV download (`studydesk-tasks-YYYY-MM-DD.csv`) |
+| `POST` | `/api/tasks/import` | `{ csv: string (≤500 KB), mode: "merge" \| "replace" }`, max 2000 rows. Returns `{ imported, skipped, total, errors[] }` |
+| `GET` | `/api` | Health check |
+
+### Subtasks
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/tasks/:id/subtasks` | List (oldest first) |
+| `POST` | `/api/tasks/:id/subtasks` | `{ title* (1–160) }` → 201 |
+| `PUT` | `/api/tasks/:id/subtasks/:subId` | `{ title?, done? }` (404 on task mismatch) |
+| `DELETE` | `/api/tasks/:id/subtasks/:subId` | Delete |
+
+### Stats
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/stats` | `{ total, pending, completed, overdue, dueToday, dueThisWeek, highPriority, byPriority[], byCategory[], completionRate }` |
+
+### Examples
+
+```bash
+# Create
+curl -X POST http://localhost:3000/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Read Chapter 8","priority":"low","category":"Reading","dueDate":"2026-09-20T09:00:00.000Z","recurrence":"weekly"}'
+
+# List pending, due-date first
+curl 'http://localhost:3000/api/tasks?status=pending&sort=due&dir=asc'
+
+# Complete (recurring tasks roll over instead)
+curl -X PUT http://localhost:3000/api/tasks/TASK_ID \
+  -H "Content-Type: application/json" \
+  -d '{"status":"completed"}'
+
+# Bulk complete (≤200 ids)
+curl -X POST http://localhost:3000/api/tasks/bulk \
+  -H "Content-Type: application/json" \
+  -d '{"ids":["id1","id2"],"action":"complete"}'
+
+# Export
+curl -o tasks.csv http://localhost:3000/api/tasks/export
 ```
 
 ---
@@ -432,16 +309,16 @@ studydesk/
 
 ```prisma
 model Task {
-  id          String      @id @default(cuid())
+  id          String    @id @default(cuid())
   title       String
   description String?
-  priority    String      @default("medium")    // low | medium | high
-  status      String      @default("pending")   // pending | completed
-  category    String?                            // Homework, Exam, Project, etc.
+  priority    String    @default("medium") // low | medium | high
+  status      String    @default("pending") // pending | completed
+  category    String?
   dueDate     DateTime?
-  recurrence  String      @default("none")       // none | daily | weekly | monthly
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  recurrence  String    @default("none") // none | daily | weekly | monthly
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   subtasks    Subtask[]
 
   @@index([status])
@@ -464,72 +341,88 @@ model Subtask {
 }
 ```
 
+SQLite file lives at `db/custom.db` (git-ignored). Delete it + re-run `db:push`
+for a fresh database.
+
+---
+
+## Project Structure
+
+```
+studydesk/
+├── prisma/schema.prisma            # Task + Subtask models
+├── public/
+│   ├── papercss/paper.min.css      # Vendored PaperCSS (no CDN dependency)
+│   ├── logo.svg
+│   └── robots.txt
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx              # Metadata, PaperCSS link, theme init, toaster
+│   │   ├── page.tsx                # Main UI orchestration
+│   │   ├── globals.css             # Theme, animations, dark mode
+│   │   └── api/                    # Route handlers (tasks, subtasks, bulk,
+│   │                               # clear-completed, export, import, stats)
+│   ├── components/                 # Cards, calendar, drawers, modals, widgets…
+│   │   └── ui/                     # toast primitives (shadcn/ui)
+│   ├── hooks/                      # tasks, stats/filters, streak, theme,
+│   │                               # notifications, toast, mobile
+│   └── lib/                        # db client, Zod schemas, CSV utils,
+│                                   # recurrence, achievements, templates
+├── .env.example                    # Copy to .env (git-ignored)
+├── components.json                 # shadcn/ui config
+├── next.config.ts                  # Standalone + strict mode + security headers
+└── package.json
+```
+
 ---
 
 ## Configuration
 
-### Environment Variables
+### Environment
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `DATABASE_URL` | SQLite database file path | `file:./db/custom.db` |
+| `DATABASE_URL` | SQLite file URL | `file:./db/custom.db` |
+| `NODE_ENV` | `development` enables warn-level Prisma logs; production logs errors only | — |
 
-### localStorage Keys
-
-The app uses localStorage for client-side state (no server-side sessions):
+### localStorage keys (client state, no server sessions)
 
 | Key | Purpose |
 |-----|---------|
-| `studydesk:filters:v1` | Persisted filter/sort state |
-| `studydesk:theme` | Dark/light theme preference |
-| `studydesk:streak` | Streak data (current, longest, total, last completion date) |
-| `studydesk:points` | Study points + history |
-| `studydesk:notif-enabled` | Browser notification toggle |
-| `studydesk:notified-ids` | Notification dedup tracking |
-| `studydesk:pomodoro-durations` | Custom Pomodoro focus/break lengths |
-| `studydesk:manual-order` | Drag-and-drop task order map |
+| `studydesk:filters:v1` | Filter/sort state |
+| `studydesk:theme` | Light/dark preference |
+| `studydesk:streak` / `studydesk:points` | Streaks, totals, points |
+| `studydesk:notif-enabled` / `studydesk:notified-ids` | Notification toggle + dedup list |
+| `studydesk:pomodoro-durations` | Custom timer lengths |
+| `studydesk:manual-order` | Drag-and-drop order map |
 
-### Next.js Config
+### Next.js
 
-```typescript
-const nextConfig: NextConfig = {
-  output: "standalone", // Optimized production build
-  reactStrictMode: true, // Strict checks on
-  // + security headers (nosniff, DENY framing, restricted permissions)
-};
-```
-
-> **Security note:** this app has no authentication — every API route is
-> open. Only run it locally or behind your own auth/proxy. Do not expose
-> it directly to the internet.
+Standalone output, React strict mode, and global security headers
+(`X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+`Referrer-Policy`, restrictive `Permissions-Policy`).
 
 ---
 
-## Scripts
+## Security Notes
 
-| Command | Description |
-|---------|-------------|
-| `bun run dev` | Start dev server on port 3000 (Turbopack) |
-| `bun run build` | Production build (standalone output) |
-| `bun run start` | Start production server |
-| `bun run lint` | Run ESLint |
-| `bun run db:push` | Push Prisma schema to database |
-| `bun run db:generate` | Regenerate Prisma client |
-| `bun run db:migrate` | Create and apply a migration |
-| `bun run db:reset` | Reset database (destructive) |
+- **No authentication conclusively: every API route is open.** Run locally or
+  behind your own auth/reverse proxy — do not expose directly to the internet.
+- Inputs are Zod-validated server-side; filters whitelisted; search capped;
+  uploads bounded (500 KB / 2000 rows / 200 ids per bulk batch).
+- Error responses are generic; stack/ORM details stay in server logs.
+- No secrets in the repo: `.env` and `*.db` are git-ignored; start from
+  `.env.example`. No external CDNs (PaperCSS and icons are local).
 
 ---
 
 ## Styling
 
-The app uses a dual-framework approach:
-
-1. **PaperCSS** (loaded via `<link>` in `layout.tsx`) — provides the hand-drawn, sketchy aesthetic with irregular borders, paper shadows, and the Patrick Hand SC / Neucha fonts
-2. **Tailwind CSS 4** — used for utility classes and the shadcn/ui base reset
-
-Most component styling is done via inline `style` props with PaperCSS-compatible color values. The dark theme uses a smart-invert CSS filter approach (`invert(0.92) hue-rotate(180deg)`) on the main app wrapper to transform light surfaces to dark while preserving semantic accent colors.
-
-### Color Palette (PaperCSS)
+PaperCSS supplies the hand-drawn look (sketchy borders, paper shadows,
+Patrick Hand SC / Neucha); Tailwind utilities + a few shadcn primitives cover
+layout and toasts. Component colors live in inline `style` props using the
+PaperCSS palette; dark mode smart-inverts surfaces while keeping semantic
+accents (red/yellow/green/blue) intact.
 
 | Token | Light | Dark |
 |-------|-------|------|
@@ -537,25 +430,32 @@ Most component styling is done via inline `style` props with PaperCSS-compatible
 | Surface | `#fffdf7` | `#34302a` |
 | Border | `#41403e` | `#8b867d` |
 | Text | `#1a1a1a` | `#f4f1ea` |
-| Primary (dark) | `#41403e` | — |
-| Secondary (blue) | `#0b74d5` | — |
-| Success (green) | `#86a361` | — |
-| Warning (yellow) | `#ddcd45` | — |
-| Danger (red) | `#a7342d` | — |
+| Accents | `#41403e` / `#0b74d5` / `#86a361` / `#ddcd45` / `#a7342d` | preserved |
+
+---
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `DATABASE_URL` missing / Prisma can't open DB | `cp .env.example .env`, then `bun run db:push` |
+| Prisma Client out of sync after schema edit | `bun run db:generate` (and restart dev server) |
+| Stale build artifacts | Delete `.next/` and rebuild |
+| Port 3000 in use | `bun run dev` binds `-p 3000`; free the port or edit the script |
+| `bun run lint` warnings | Must be zero — the repo convention is warning-free lint |
+| Fresh start | Delete `db/custom.db`, re-run `db:push` (data loss!) |
 
 ---
 
 ## Acknowledgments
 
-- [PaperCSS](https://www.getpapercss.com/) — The less-than-900-line CSS framework
-- [Next.js](https://nextjs.org/) — The React framework for the web
-- [Prisma](https://www.prisma.io/) — Next-generation TypeScript ORM
-- [dnd-kit](https://dndkit.com/) — Modern drag-and-drop toolkit
-- [Lucide](https://lucide.dev/) — Beautiful, consistent icons
-- [Zod](https://zod.dev/) — TypeScript-first schema validation
+- [PaperCSS](https://www.getpapercss.com/) — sub-900-line sketchy CSS framework
+- [Next.js](https://nextjs.org/), [Prisma](https://www.prisma.io/),
+  [dnd-kit](https://dndkit.com/), [Lucide](https://lucide.dev/),
+  [Zod](https://zod.dev/)
 
 ---
 
 ## License
 
-This project is private and unlicensed.
+Private project — all rights reserved unless a license file states otherwise.
