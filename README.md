@@ -1,3 +1,29 @@
+## Architecture & Approach
+
+Used GoogleStitch for designing and took help from Muse Spark 1.3 via OpenCode for backend and generating readme file content
+
+Single Next.js app, no separate backend: React Server Components render the shell,
+one client page (`src/app/page.tsx`) orchestrates state, and colocated route
+handlers under `src/app/api/` own persistence via a singleton Prisma client.
+All writes go through Zod schemas shared in `src/lib/` (`task-utils.ts`), so
+validation rules are defined once and enforced server-side — the UI only mirrors
+them for fast feedback.
+
+Server state (tasks, stats) is fetched with plain `fetch` in small hooks
+(`use-tasks`, `use-streak`); everything personal-but-local (filters, theme,
+streaks, points, notification dedup, timer lengths, manual order) lives in
+localStorage under `studydesk:*` keys. There are no sessions and no auth, which
+is a conscious scope cut for a local-first student tool — the tradeoff is
+documented in [Security Notes](#security-notes).
+
+Gamification (streaks, points, badges) is computed client-side from completion
+events, while recurrence rollover lives server-side in `PUT /api/tasks/:id` so
+the invariant (advance date + reset subtasks atomically) can't be broken by the
+client. CSV import/export reuses the same schemas with hard caps (500 KB /
+2000 rows) to bound untrusted input.
+
+---
+
 # StudyDesk - Student Task Manager
 
 A gamified, paper-styled task manager for students. Plan homework, exams, projects
