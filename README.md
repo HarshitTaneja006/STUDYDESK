@@ -1,8 +1,8 @@
-# StudyDesk — Student Task Manager
+# StudyDesk - Student Task Manager
 
 A gamified, paper-styled task manager for students. Plan homework, exams, projects
 and personal goals with priorities, due dates, subtasks, recurring tasks, a calendar
-view, a Pomodoro focus timer, streaks and achievement badges — wrapped in a
+view, a Pomodoro focus timer, streaks and achievement badges - wrapped in a
 hand-drawn PaperCSS aesthetic with light and dark ("midnight desk") themes.
 
 Built with **Next.js 16** (App Router), **TypeScript**, **Prisma + SQLite**,
@@ -48,10 +48,10 @@ Built with **Next.js 16** (App Router), **TypeScript**, **Prisma + SQLite**,
 | Pending vs Completed | Auto-grouped sections with live count badges and an "All done!" celebration empty state |
 | Priorities | Low / Medium / High with color-coded left stripes and chips |
 | Due dates | Date-time picker with overdue / today / tomorrow detection, due-soon pulse dot and overdue glow |
-| Categories | Homework, Exam, Project, Personal, Reading, Other — custom categories supported (max 40 chars) |
+| Categories | Homework, Exam, Project, Personal, Reading, Other - custom categories supported (max 40 chars) |
 | Search | Live search across titles and descriptions (capped at 100 chars server-side) |
 | Filters | By status, priority and category, with one-click reset; filter state persists in localStorage |
-| Sorting | By due date (dateless tasks sort last), priority, or creation time — ascending/descending |
+| Sorting | By due date (dateless tasks sort last), priority, or creation time - ascending/descending |
 | Manual ordering | Drag-and-drop reordering via dnd-kit, persisted per filter view |
 | Detail drawer | Slide-in panel with meta chips, due-date card, full description, subtasks, timestamps, edit/complete actions |
 
@@ -90,7 +90,7 @@ Built with **Next.js 16** (App Router), **TypeScript**, **Prisma + SQLite**,
 - Study points per completion: high = 30, medium = 20, low = 10
 - Flame flicker animation while a streak is alive
 
-**Achievements** — 12 badges with progress tracking, grayscale locked state,
+**Achievements** - 12 badges with progress tracking, grayscale locked state,
 toast + full-screen burst on unlock:
 
 | Badge | Unlock condition |
@@ -182,9 +182,9 @@ category, description and due offset. Smart due times: 5 PM same-day, 9 AM later
 
 ### Prerequisites
 
-- **Bun** 1.x (`curl -fsSL https://bun.sh/install | bash`) — or Node.js 18+ with npm
+- **Bun** 1.x (`curl -fsSL https://bun.sh/install | bash`) - or Node.js 18+ with npm
   (adjust commands accordingly)
-- No external services needed — the database is a local SQLite file
+- No external services needed - the database is a local SQLite file
 
 ### 1. Clone & install
 
@@ -200,7 +200,7 @@ bun install
 cp .env.example .env
 ```
 
-`.env` is git-ignored — never commit it. Contents:
+`.env` is git-ignored - never commit it. Contents:
 
 ```env
 DATABASE_URL=file:./db/custom.db
@@ -210,7 +210,7 @@ DATABASE_URL=file:./db/custom.db
 
 ```bash
 bun run db:push      # create tables from prisma/schema.prisma
-bun run db:generate  # (re)generate the Prisma client — also runs on build
+bun run db:generate  # (re)generate the Prisma client - also runs on build
 ```
 
 ### 4. Run it
@@ -383,7 +383,7 @@ studydesk/
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `DATABASE_URL` | SQLite file URL | `file:./db/custom.db` |
-| `NODE_ENV` | `development` enables warn-level Prisma logs; production logs errors only | — |
+| `NODE_ENV` | `development` enables warn-level Prisma logs; production logs errors only | - |
 
 ### localStorage keys (client state, no server sessions)
 
@@ -407,7 +407,7 @@ Standalone output, React strict mode, and global security headers
 ## Security Notes
 
 - **No authentication conclusively: every API route is open.** Run locally or
-  behind your own auth/reverse proxy — do not expose directly to the internet.
+  behind your own auth/reverse proxy - do not expose directly to the internet.
 - Inputs are Zod-validated server-side; filters whitelisted; search capped;
   uploads bounded (500 KB / 2000 rows / 200 ids per bulk batch).
 - Error responses are generic; stack/ORM details stay in server logs.
@@ -442,14 +442,14 @@ accents (red/yellow/green/blue) intact.
 | Prisma Client out of sync after schema edit | `bun run db:generate` (and restart dev server) |
 | Stale build artifacts | Delete `.next/` and rebuild |
 | Port 3000 in use | `bun run dev` binds `-p 3000`; free the port or edit the script |
-| `bun run lint` warnings | Must be zero — the repo convention is warning-free lint |
+| `bun run lint` warnings | Must be zero - the repo convention is warning-free lint |
 | Fresh start | Delete `db/custom.db`, re-run `db:push` (data loss!) |
 
 ---
 
 ## Acknowledgments
 
-- [PaperCSS](https://www.getpapercss.com/) — sub-900-line sketchy CSS framework
+- [PaperCSS](https://www.getpapercss.com/) - sub-900-line sketchy CSS framework
 - [Next.js](https://nextjs.org/), [Prisma](https://www.prisma.io/),
   [dnd-kit](https://dndkit.com/), [Lucide](https://lucide.dev/),
   [Zod](https://zod.dev/)
@@ -458,4 +458,4 @@ accents (red/yellow/green/blue) intact.
 
 ## License
 
-Private project — all rights reserved unless a license file states otherwise.
+Private project - all rights reserved unless a license file states otherwise.

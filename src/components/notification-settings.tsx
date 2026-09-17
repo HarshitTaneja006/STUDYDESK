@@ -58,7 +58,7 @@ export function NotificationSettings({ tasks }: NotificationSettingsProps) {
       aria-pressed={enabled}
       title={
         enabled
-          ? "Notifications enabled — click to disable"
+          ? "Notifications enabled - click to disable"
           : "Enable browser notifications for due-soon tasks"
       }
       style={{

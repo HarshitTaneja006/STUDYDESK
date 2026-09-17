@@ -87,7 +87,7 @@ export default function Home() {
   function openCreateWithDate(date: Date) {
     setEditingTask(null);
     setFormOpen(true);
-    // pre-fill due date — handled via editingTask null + a date hint; simplest: open form then user picks
+    // pre-fill due date - handled via editingTask null + a date hint; simplest: open form then user picks
     // We'll pass date via a global since TaskForm doesn't accept initial date prop yet.
     // For now, just open create; user can use quick chips.
     void date;
@@ -120,7 +120,7 @@ export default function Home() {
         if (ach) {
           toast({
             title: `${ach.emoji} Achievement Unlocked!`,
-            description: `${ach.label} — ${ach.description}`,
+            description: `${ach.label} - ${ach.description}`,
           });
         }
       }

@@ -21,7 +21,7 @@ const SHORTCUTS: { keys: string[]; label: string }[] = [
 const TIPS: string[] = [
   "Click any task title to open the detail drawer with subtasks and full info.",
   "Use Quick Add Templates to instantly create common student tasks like problem sets or reading assignments.",
-  "Set a recurrence (daily/weekly/monthly) on tasks with due dates — completing them auto-advances the due date.",
+  "Set a recurrence (daily/weekly/monthly) on tasks with due dates - completing them auto-advances the due date.",
   "Enable browser notifications in the Tools menu to get alerts for tasks due within 24 hours.",
   "Export your tasks to CSV for backup, and import them on another device.",
   "Toggle dark mode with the sun/moon button for late-night studying.",

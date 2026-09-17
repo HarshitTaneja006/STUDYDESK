@@ -420,7 +420,7 @@ export function PomodoroTimer() {
               You&apos;ve completed{" "}
               <strong style={{ color: "#a7342d" }}>{completedSessions}</strong> focus session
               {completedSessions === 1 ? "" : "s"} today.{" "}
-              {completedSessions >= 4 ? "Great work — take a longer break! 🌟" : "Keep going! 💪"}
+              {completedSessions >= 4 ? "Great work - take a longer break! 🌟" : "Keep going! 💪"}
             </p>
           )}
 

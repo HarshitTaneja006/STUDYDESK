@@ -448,7 +448,7 @@ export function TaskDetail({
               }}
             >
               <Repeat size={14} />
-              Set as {current.recurrence} recurring — add a due date to enable auto-advance.
+              Set as {current.recurrence} recurring - add a due date to enable auto-advance.
             </div>
           )}
 

@@ -129,7 +129,7 @@ export function QuickAddTemplates({ onCreated }: QuickAddTemplatesProps) {
               type="button"
               onClick={() => applyTemplate(tpl)}
               disabled={busy !== null}
-              title={`${tpl.title} — ${tpl.description.slice(0, 60)}...`}
+              title={`${tpl.title} - ${tpl.description.slice(0, 60)}...`}
               style={{
                 display: "flex",
                 flexDirection: "column",

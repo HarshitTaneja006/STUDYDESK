@@ -10,12 +10,16 @@
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:reset": "prisma migrate reset"
+    "db:reset": "prisma migrate reset",
+    "db:turso:diff": "prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script",
+    "db:turso:push": "prisma migrate diff --from-empty --to-schema-datamodel prisma/schema.prisma --script > ./turso-migration.sql && echo \"SQL written to turso-migration.sql - apply with: turso db shell <your-db-name> < ./turso-migration.sql\""
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@libsql/client": "0.15.15",
+    "@prisma/adapter-libsql": "6.19.2",
     "@prisma/client": "^6.11.1",
     "@radix-ui/react-toast": "^1.2.14",
     "class-variance-authority": "^0.7.1",

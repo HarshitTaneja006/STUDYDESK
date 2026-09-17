@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
-  title: "StudyDesk — Student Task Manager",
+  title: "StudyDesk - Student Task Manager",
   description: "A friendly paper-styled task manager for students. Plan homework, exams and personal goals with due dates, priorities and stats.",
   keywords: ["student tasks", "homework planner", "task manager", "study planner", "PaperCSS"],
   authors: [{ name: "StudyDesk" }],

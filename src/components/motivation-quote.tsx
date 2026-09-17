@@ -97,7 +97,7 @@ export function MotivationQuote() {
             textAlign: "right",
           }}
         >
-          — {quote.author}
+          - {quote.author}
         </small>
       </div>
     </div>

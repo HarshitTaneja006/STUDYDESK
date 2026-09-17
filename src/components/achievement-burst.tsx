@@ -6,7 +6,7 @@ import type { Achievement } from "@/lib/achievements";
 interface AchievementBurstProps {
   /** Achievement to celebrate, or null when idle */
   achievement: Achievement | null;
-  /** Unique trigger key — changes when a new achievement unlocks */
+  /** Unique trigger key - changes when a new achievement unlocks */
   trigger: number;
   onDone: () => void;
 }

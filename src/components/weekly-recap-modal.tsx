@@ -388,7 +388,7 @@ export function WeeklyRecapModal({ open, onClose }: WeeklyRecapModalProps) {
                   fontStyle: "italic",
                 }}
               >
-                No badges earned yet — complete tasks to unlock achievements!
+                No badges earned yet - complete tasks to unlock achievements!
               </span>
             ) : (
               ACHIEVEMENTS.filter((a) => unlockedBadges.includes(a.id)).map((a) => (
